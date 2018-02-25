@@ -65,7 +65,8 @@ function generateFile(){
         webApiControllerDispacher();
     }
     else{
-        console.log("Template type must be expecified as first parameter")
+        console.log("usage: core-generate [TEMPLATE TYPE] [--name | -n] [CLASSNAME]")
+        console.log("info: template type must be expecified as first parameter")
     }
 }
 
