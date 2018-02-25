@@ -66,7 +66,7 @@ function generateFile(){
     }
     else{
         console.log("usage: core-generate [TEMPLATE TYPE] [--name | -n] [CLASSNAME]")
-        console.log("info: template type must be expecified as first parameter")
+        console.log("info: template type must be expecified as first parameter.")
     }
 }
 
