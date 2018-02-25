@@ -3,11 +3,12 @@ const fs = require("fs");
 
 let readOptions = { encoding : "UTF8" }; 
 let location = path.resolve("\.");
-let typeFlag = process.argv[2];
-let className = process.argv[3];
+let templateType = process.argv[2];
+let typeFlag = process.argv[3];
+let className = process.argv[4];
 let controllerFolder = path.resolve(location, "./Controllers");
 
-function getNamespace(callback){
+function getNamespaceNameFromStartupFile(callback){
     let fileName = path.resolve(location, "Startup.cs");
     let namespaceKeyword = "namespace";
     fs.readFile(fileName, readOptions, function(err, data){
@@ -15,16 +16,18 @@ function getNamespace(callback){
             callback(false, null);
         }
         else{
-            data = data.slice(data.indexOf(namespaceKeyword) + namespaceKeyword.length, data.indexOf("{")).trim() + ".Controllers";            
+            let startpos = data.indexOf(namespaceKeyword) + namespaceKeyword.length;
+            let endpos = data.indexOf("{");
+            data = data.slice(startpos, endpos).trim() + ".Controllers";            
             callback(true, data);    
         }
     });
 }
 
-function generateWebAPIController(){
+function webApiControllerDispacher(){
     let classNamespace;        
     if((typeFlag == "--name" || typeFlag == "-n") && className){
-        getNamespace(function(exists, data){
+        getNamespaceNameFromStartupFile(function(exists, data){
             if(exists){
                 classNamespace = data;
                 className = className[0].toUpperCase() + className.slice(1,className.length) + "Controller";
@@ -57,14 +60,23 @@ function generateWebAPIController(){
     };   
 }
 
+function generateFile(){
+    if(templateType == "webapi/controller"){
+        webApiControllerDispacher();
+    }
+    else{
+        console.log("Template type must be expecified as first parameter")
+    }
+}
+
 fs.access(controllerFolder, function(exists){
     if(exists){
         fs.mkdir("./Controllers", () => {
-            generateWebAPIController();
+            generateFile();
         });
     }
     else{
-        generateWebAPIController();
+        generateFile();
     }
 });
 
