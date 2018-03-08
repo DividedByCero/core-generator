@@ -4,14 +4,14 @@ const finder = require("./namespaceFinder.js");
 const webAPIProvider = require("./providers/webApiProvider.js");
 const utils = require("./utils.js");
 
-let readOptions = { encoding : "UTF8" };
-
-let actualPath = path.resolve("\.");
+const READOPTIONS = { encoding : "UTF8" },
+      ACTUALPATH = path.resolve("\."),
+      STARTUPFILE = "Startup.cs";
 
 let arguments = {
-    location : actualPath,
+    location : ACTUALPATH,
     templateType : process.argv[2],
-    controllerFolder : path.resolve(actualPath, "./Controllers"),
+    controllerFolder : path.resolve(ACTUALPATH, "./Controllers"),
     className : process.argv[3],
     outputFolder : process.argv[4]
 };
@@ -19,24 +19,25 @@ let arguments = {
 (function(args){
     this.arguments = args;
     var output = this.arguments.outputFolder || this.arguments.controllerFolder;
+    
     if(this.arguments.templateType){    
 
         utils.createFolderIfNotExists.bind(this);
-        var func = utils.createFolderIfNotExists(output);
+        var folderResult = utils.createFolderIfNotExists(output);
 
-        func.then(function(result){
+        folderResult.then(function(result){
             var arguments = this.arguments;
 
             switch(arguments.templateType){
                 case "webapi/controller":
-                    let result = finder.NamespaceFinder(this.arguments.location, 
-                                                        "Startup.cs", 
-                                                        readOptions, 
-                                                        this.arguments.outputFolder);
+                    let namespaceResult = finder.NamespaceFinder(this.arguments.location, 
+                                                                 STARTUPFILE, 
+                                                                 READOPTIONS, 
+                                                                 this.arguments.outputFolder);
 
-                    result.then(function(namespace){
+                    namespaceResult.then(function(namespace){
                         webAPIProvider.GenerateWebAPIDocument(namespace, this.arguments.className, 
-                                                              readOptions, output, this.arguments.location);
+                                                              READOPTIONS, output, this.arguments.location);
                     });
                     break;
                 default:
