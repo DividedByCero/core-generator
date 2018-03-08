@@ -11,16 +11,17 @@ exports.generateClassName = function(className){
     return ToPascalCase(className) + "Controller";
 };
 
-exports.createFolderIfNotExists = function(folderName, fs){
+exports.createFolderIfNotExists = function(args, fs){
     return new Promise(function(resolve, reject){
-        fs.access(folderName, function(exists){
+        args.controllerFolder = args.outputFolder || args.controllerFolder;
+        fs.access(args.outputFolder, function(exists){
             if(exists){
                 fs.mkdir(folderName, () => {
-                    resolve(folderName);
+                    resolve(args);
                 });
             }
             else{
-                resolve(folderName);
+                resolve(args);
             }
         });  
     }); 

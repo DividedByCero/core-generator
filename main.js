@@ -17,11 +17,9 @@ let arguments = {
 };
 
 if(arguments.className){
-    utils.createFolderIfNotExists(arguments.outputFolder || arguments.controllerFolder, fs).then(function(out){
-        console.log(out, arguments.templateType);
-        switch(arguments.templateType){
+    utils.createFolderIfNotExists(arguments, fs).then(function(args){
+        switch(args.templateType){
             case "webapi/controller":
-                return;
                 NamespaceFinder(outputFolder, "Startup.cs", fs, readOptions, out).then(function(namespace){
                     webAPIProvider.GenerateWebAPIDocument(namespace, arguments.className, readOptions, out);
                 });

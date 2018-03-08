@@ -8,9 +8,9 @@ const utils = require("./utils.js");
  * @param outputDir {string}
  * @return {String}
 */
-exports.NamespaceFinder = function(treeLocation, fileName, fs, opts, outputDir){
+exports.NamespaceFinder = function(args, fileName, fs, opts){
     let NAMESPACE_TEXT = "namespace";
-    let StartupFileLocation = path.resolve(treeLocation, fileName);
+    let StartupFileLocation = path.resolve(args.location, fileName);
 
     return new Promise(function(resolve, reject){
         fs.readFile(StartupFileLocation, opts, function(err, data){
