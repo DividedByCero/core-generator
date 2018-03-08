@@ -3,13 +3,14 @@ const path = require("path");
 const fs = require("fs");
 
 /*
- * @param treeLocation {String}
+ * Get the namespace tree for Startup.cs project file.
+ * @param location {String}
  * @param fileName {String}
- * @param fs {fs Node Lib Object}
  * @param opts {Object}
- * @param outputDir {string}
+ * @param outputLocation {string}
  * @return {String}
 */
+
 exports.NamespaceFinder = function(location, fileName, opts, outputLocation){
     let NAMESPACE_TEXT = "namespace";
     let StartupFileLocation = path.resolve(location, fileName);
