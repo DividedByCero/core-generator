@@ -24,15 +24,15 @@ exports.NamespaceFinder = function(location, fileName, opts, outputLocation){
             let end = data.indexOf("{");
 
             data = data.slice(start, end).trim();
-            if(outputLocation)
-            {
+
+            if(outputLocation) {
                 let outputDir = location.split("/")
                                         .map(x => utils.ToPascalCase(x))
                                         .join(".");
     
                 data = ("").concat(data, ".", location);            
             }
-            else{
+            else {
                 data += ".Controllers";
             }
     

@@ -3,8 +3,14 @@ const path = require("path");
 const fs = require("fs");
 
 exports.GenerateWebAPIDocument = function(namespace, className, opts, outputDir, actualPath){
-    let templatefile = path.resolve(path.resolve(__dirname, ".."), "templates/web-api-controller.cs");
+    // had to use ".." because __dirname target to this file location.
+    let programLocation = path.resolve(__dirname, "..");
+
+    let templatefile = path.resolve(programLocation, "templates/web-api-controller.cs");
+    //building a castle of abstractions. XD
     className = utils.generateClassName(className);
+
+    //../location/filename.cs
     outputDir = path.resolve(outputDir, className + ".cs");    
 
     fs.access(outputDir, function(exists){
@@ -18,13 +24,13 @@ exports.GenerateWebAPIDocument = function(namespace, className, opts, outputDir,
                 fileData = fileData.replace("[[CONTROLLER-NAME]]", className);    
                 fileData = fileData.replace("[[NAMESPACE]]", namespace);    
 
-                fs.writeFile(outputDir, fileData, () => {
-                    console.log("file successfully scarffolded");
+                fs.writeFile(outputDir, fileData, function() {
+                    console.log("File successfully scarffolded.");
                 });
             });
         }
         else{
-            console.log("Invalid Name, The Controller already exists.");
+            console.log("Invalid name, the Controller already exists...");
         }
     });    
 }
