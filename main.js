@@ -1,6 +1,6 @@
 const path = require("path");
 const fs = require("fs");
-const namespaceFinder = require("./namespaceFinder.js");
+const finder = require("./namespaceFinder.js");
 const webAPIProvider = require("./providers/webApiProvider.js");
 const utils = require("./utils.js");
 
@@ -16,21 +16,39 @@ let arguments = {
     outputFolder : process.argv[4]
 };
 
-if(arguments.className){
-    utils.createFolderIfNotExists(arguments, fs).then(function(args){
-        switch(args.templateType){
-            case "webapi/controller":
-                NamespaceFinder(outputFolder, "Startup.cs", fs, readOptions, out).then(function(namespace){
-                    webAPIProvider.GenerateWebAPIDocument(namespace, arguments.className, readOptions, out);
-                });
-            default:
-                console.log("usage: core-generate [TEMPLATE TYPE] [--name | -n] [CLASSNAME]")
-                console.log("info: template type must be expecified as first parameter.")
-        
-        }    
-    }).catch(function(out){
-        console.log(out, templateType);
-        console.log("Error, there are not permission into the folder that this process was executed.");
-    });    
-};
+(function(args){
+    this.arguments = args;
+    var output = this.arguments.outputFolder || this.arguments.controllerFolder;
+    if(this.arguments.templateType){    
+
+        utils.createFolderIfNotExists.bind(this);
+        var func = utils.createFolderIfNotExists(output);
+
+        func.then(function(result){
+            var arguments = this.arguments;
+
+            switch(arguments.templateType){
+                case "webapi/controller":
+                    let result = finder.NamespaceFinder(this.arguments.location, 
+                                                        "Startup.cs", 
+                                                        readOptions, 
+                                                        this.arguments.outputFolder);
+
+                    result.then(function(namespace){
+                        webAPIProvider.GenerateWebAPIDocument(namespace, this.arguments.className, 
+                                                              readOptions, output, this.arguments.location);
+                    });
+                    break;
+                default:
+                    utils.printInfo();
+        }        
+        }.bind(this));
+    }
+    else{
+        utils.printInfo();
+    };
+    
+})(arguments);
+
+
 
