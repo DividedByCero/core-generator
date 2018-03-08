@@ -1,17 +1,25 @@
 const fs = require("fs");
+
 /*
  * @param value {String}
  * @return {String}
 */
-
 var ToPascalCase = function(value){
     return value[0].toUpperCase() + value.slice(1, value.length);
 };
 
+/*
+ * @param className {String}
+ * @return {String}
+*/
 var generateClassName = function(className){
     return ToPascalCase(className) + "Controller";
 };
 
+/*
+ * @param outputFolder {String}
+ * @return {Promise}
+*/
 var createFolderIfNotExists = function(outputFolder){
     return new Promise(function(resolve, reject){
         fs.access(outputFolder, function(exists){
