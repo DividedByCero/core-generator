@@ -5,15 +5,7 @@ const fs = require("fs");
  * @return {String}
 */
 var ToPascalCase = function(value){
-    return value[0].toUpperCase() + value.slice(1, value.length);
-};
-
-/*
- * @param className {String}
- * @return {String}
-*/
-var generateClassName = function(className){
-    return ToPascalCase(className) + "Controller";
+    return value[0].toUpperCase() + value.toLowerCase().slice(1, value.length);
 };
 
 /*
@@ -41,6 +33,5 @@ var printInfo = function(){
 }
 
 exports.ToPascalCase = ToPascalCase;
-exports.generateClassName = generateClassName;
 exports.createFolderIfNotExists = createFolderIfNotExists;
 exports.printInfo = printInfo;

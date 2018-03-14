@@ -4,11 +4,11 @@ const fs = require("fs");
 
 exports.GenerateWebAPIDocument = function(namespace, className, opts, outputDir, actualPath){
     // had to use ".." because __dirname target to this file location.
-    let programLocation = path.resolve(__dirname, "..");
+    var programLocation = path.resolve(__dirname, "..");
 
-    let templatefile = path.resolve(programLocation, "templates/web-api-controller.cs");
+    var templatefile = path.resolve(programLocation, "templates/web-api-controller.cs");
     //building a castle of abstractions. XD
-    className = utils.generateClassName(className);
+    className = utils.ToPascalCase(className) + "Controller";
 
     //../location/filename.cs
     outputDir = path.resolve(outputDir, className + ".cs");    
