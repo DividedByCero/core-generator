@@ -8,7 +8,7 @@ const READOPTIONS = { encoding : "UTF8" },
       ACTUALPATH = path.resolve("\."),
       STARTUPFILE = "Startup.cs";
 
-var arguments = {
+var options = {
     location : ACTUALPATH,
     templateType : process.argv[2],
     controllerFolder : path.resolve(ACTUALPATH, "./Controllers"),
@@ -17,20 +17,20 @@ var arguments = {
 };
 
 (function(args){
-    this.arguments = args;
-    var output = this.arguments.outputFolder || this.arguments.controllerFolder;
+    this.options = args;
+    var output = this.options.outputFolder || this.options.controllerFolder;
     
-    if(this.arguments.templateType){    
+    if(this.options.templateType){    
 
         utils.createFolderIfNotExists.bind(this);
         var folderResult = utils.createFolderIfNotExists(output);
 
         folderResult.then(function(result){
-            var location = this.arguments.location;
-            var outputLocation = this.arguments.outputFolder;
-            var clsName = this.arguments.className;
+            var location = this.options.location;
+            var outputLocation = this.options.outputFolder;
+            var clsName = this.options.className;
 
-            switch(arguments.templateType){
+            switch(options.templateType){
                 case "webapi/controller":
                     let namespaceResult = finder.NamespaceFinder(location, STARTUPFILE, READOPTIONS, location, outputLocation);
 
@@ -47,7 +47,7 @@ var arguments = {
         utils.printInfo();
     };
     
-})(arguments);
+})(options);
 
 
 
