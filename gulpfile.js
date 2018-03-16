@@ -1,6 +1,8 @@
 let gulp = require("gulp");
 let babel = require("gulp-babel");
 
+// TODO : move all the routes into constants.
+
 gulp.task("transpile:providers", function(){
     return gulp.src("./providers/**/*.js")
                .pipe(babel({
