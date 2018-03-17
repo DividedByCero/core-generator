@@ -1,4 +1,3 @@
-
 import path from "path";
 import fs from "fs";
 import { printInfo, ToPascalCase, createFolderIfNotExists, resolveParentPath, setFileExtensionAsCSharpFile,
@@ -14,7 +13,7 @@ export default function(namespace, className, opts, outputDir, actualPath){
     outputDir = setFileExtensionAsCSharpFile(outputDir, className);    
 
     checkIfFileExist(outputDir, () => {
-        readTemplateFile(templatefile, opts, (fileData) => {
+        readFile(templatefile, opts, (fileData) => {
             fileData = fileData.replace("[[CONTROLLER-NAME]]", className);    
             fileData = fileData.replace("[[NAMESPACE]]", namespace);    
 
