@@ -1,6 +1,9 @@
-const utils = require("./utils.js");
-const path = require("path");
-const fs = require("fs");
+import * as path from "path";
+import * as fs from "fs";
+import { printInfo, ToPascalCase, createFolderIfNotExists, resolveParentPath, setFileExtensionAsCSharpFile,
+         checkIfFileExist, readFile } from "../utils.js";
+
+const NAMESPACE_TEXT = "namespace";
 
 /*
  * Get the namespace tree for Startup.cs project file.
@@ -11,13 +14,11 @@ const fs = require("fs");
  * @return {String}
 */
 
-exports.NamespaceFinder = function(location, fileName, opts, outputLocation){
-    let NAMESPACE_TEXT = "namespace";
-    let StartupFileLocation = path.resolve(location, fileName);
-
+export default function(location, fileName, opts, outputLocation){
+    let startupFileLocation = path.resolve(location, fileName);
 
     return new Promise(function(resolve, reject){
-        fs.readFile(StartupFileLocation, opts, function(err, data){
+        fs.readFile(startupFileLocation, opts, function(err, data){
             if(err) reject(err);
             
             let start = data.indexOf(NAMESPACE_TEXT) + NAMESPACE_TEXT.length;

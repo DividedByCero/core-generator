@@ -1,36 +1,30 @@
-const utils = require("../utils.js");
-const path = require("path");
-const fs = require("fs");
 
-exports.GenerateWebAPIDocument = function(namespace, className, opts, outputDir, actualPath){
-    // had to use ".." because __dirname target to this file location.
-    var programLocation = path.resolve(__dirname, "..");
+import path from "path";
+import fs from "fs";
+import { printInfo, ToPascalCase, createFolderIfNotExists, resolveParentPath, setFileExtensionAsCSharpFile,
+         checkIfFileExist, readFile } from "../utils.js";
 
-    var templatefile = path.resolve(programLocation, "templates/web-api-controller.cs");
-    //building a castle of abstractions. XD
-    className = utils.ToPascalCase(className) + "Controller";
+const CONTROLLERSUFFIX = "Controller";
 
-    //../location/filename.cs
-    outputDir = path.resolve(outputDir, className + ".cs");    
+export default function(namespace, className, opts, outputDir, actualPath){
+    let programLocation = resolveParentPath();
+    let templatefile = path.resolve(programLocation, "templates/web-api-controller.cs");
 
-    fs.access(outputDir, function(exists){
-        if(exists){
-            fs.readFile(templatefile, opts, function(err, fileData){
-                if(err) {
-                    console.log(err);
-                    return;
-                }
+    className = ToPascalCase(className) + CONTROLLERSUFFIX;
+    outputDir = setFileExtensionAsCSharpFile(outputDir, className);    
 
-                fileData = fileData.replace("[[CONTROLLER-NAME]]", className);    
-                fileData = fileData.replace("[[NAMESPACE]]", namespace);    
+    checkIfFileExist(outputDir, () => {
+        readTemplateFile(templatefile, opts, (fileData) => {
+            fileData = fileData.replace("[[CONTROLLER-NAME]]", className);    
+            fileData = fileData.replace("[[NAMESPACE]]", namespace);    
 
-                fs.writeFile(outputDir, fileData, function() {
-                    console.log("File successfully scarffolded.");
-                });
+            fs.writeFile(outputDir, fileData, function() {
+                console.log("File successfully scarffolded.");
             });
-        }
-        else{
-            console.log("Invalid name, the Controller already exists...");
-        }
-    });    
-}
+        }, (err) => {
+            console.log(err);
+        });
+    }, () => {
+        console.log("Invalid name, the Controller already exists...");
+    });
+};
