@@ -1,6 +1,6 @@
 import path from "path";
 import fs from "fs";
-import { printInfo, ToPascalCase, createFolderIfNotExists, resolveParentPath, setFileExtensionAsCSharpFile,
+import { ToPascalCase, resolveParentPath, setFilePathExtensionAsCSharpFile,
          checkIfFileExist, readFile } from "../utils.js";
 
 const CONTROLLERSUFFIX = "Controller";
@@ -10,7 +10,7 @@ export default function(namespace, className, opts, outputDir, actualPath){
     let templatefile = path.resolve(programLocation, "templates/web-api-controller.cs");
 
     className = ToPascalCase(className) + CONTROLLERSUFFIX;
-    outputDir = setFileExtensionAsCSharpFile(outputDir, className);    
+    outputDir = setFilePathExtensionAsCSharpFile(outputDir, className);    
 
     checkIfFileExist(outputDir, () => {
         readFile(templatefile, opts, (fileData) => {

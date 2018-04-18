@@ -1,7 +1,6 @@
 import * as path from "path";
 import * as fs from "fs";
-import { printInfo, ToPascalCase, createFolderIfNotExists, resolveParentPath, setFileExtensionAsCSharpFile,
-         checkIfFileExist, readFile } from "../utils.js";
+import { ToPascalCase, readFile } from "./utils.js";
 
 const NAMESPACE_TEXT = "namespace";
 

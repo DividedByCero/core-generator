@@ -1,16 +1,46 @@
 import fs from "fs";
 
-/*
- * @param value {String}
- * @return {String}
-*/
-let ToPascalCase = (value) => value[0].toUpperCase() + value.toLowerCase().slice(1, value.length);
+export {ToPascalCase, 
+        createFolderIfNotExists, 
+        printInfo, 
+        resolveParentPath, 
+        setFilePathExtensionAsCSharpFile, 
+        checkIfFileExist, 
+        readFile };
 
-let resolveParentPath = () => path.resolve(__dirname, "..");
+/**
+ * 
+ * @param {string} value 
+ * @return string
+ */
+function ToPascalCase(value){
+    return value[0].toUpperCase() + value.toLowerCase().slice(1, value.length);
+}
 
-let setFileExtensionAsCSharpFile = (output, clsName) => path.resolve(output, clsName + ".cs");
+/**
+ * @return string
+ */
+function resolveParentPath(){
+    return path.resolve(__dirname, "..");
+}
 
-let checkIfFileExist = (output, onSuccess, onError) => {
+/**
+ * 
+ * @param {string} output 
+ * @param {string} clsName
+ * @return string 
+ */
+function setFilePathExtensionAsCSharpFile(output, clsName){
+    return path.resolve(output, clsName + ".cs");
+}
+
+/**
+ * 
+ * @param {string} output 
+ * @param {function} onSuccess 
+ * @param {function} onError 
+ */
+function checkIfFileExist(output, onSuccess, onError){
     fs.access(output, (exists) => {
         if(exists)
             onSuccess();
@@ -19,7 +49,14 @@ let checkIfFileExist = (output, onSuccess, onError) => {
     });    
 };
 
-let readFile = (url, opts, onSuccess, onError) => {
+/**
+ * 
+ * @param {string} url 
+ * @param {object} opts 
+ * @param {function} onSuccess 
+ * @param {function} onError 
+ */
+function readFile(url, opts, onSuccess, onError) {
     fs.readFile(url, opts, function(err, fileData){
         if(err)
             onError(err);
@@ -27,12 +64,12 @@ let readFile = (url, opts, onSuccess, onError) => {
             onSuccess(fileData);
     });
 }
-
-/*
- * @param outputFolder {String}
- * @return {Promise}
-*/
-let createFolderIfNotExists = (outputFolder) => {
+/**
+ * 
+ * @param {string} outputFolder 
+ * @return Promise
+ */
+function createFolderIfNotExists(outputFolder) {
     return new Promise(function(resolve, reject){
         fs.access(outputFolder, function(exists){
             if(exists){                
@@ -47,12 +84,13 @@ let createFolderIfNotExists = (outputFolder) => {
     }); 
 };
 
-let printInfo = () => {
+/**
+ * Print CLI call structure info.
+ */
+function printInfo(){
     console.log("usage: core-generate [TEMPLATE TYPE] [--name | -n] [CLASSNAME]");
     console.log("info: template type must be expecified as first parameter.");            
 }
 
 
 
-export {ToPascalCase, createFolderIfNotExists, printInfo, resolveParentPath, setFileExtensionAsCSharpFile, 
-        checkIfFileExist, readFile };
