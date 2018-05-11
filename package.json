@@ -17,5 +17,6 @@
     "gulp": "^3.9.1",
     "gulp-babel": "^8.0.0-beta.2",
     "gulp-clean": "^0.4.0"
-  }
+  },
+  "bin" : {"core-generate" : "./core-generate"}
 }
