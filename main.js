@@ -25,14 +25,14 @@ switch (options.templateType) {
   case "webapi/controller":
     //TODO : Rewrite behavior.
     break;
-  case "class"
+  case "class":
    //TODO : Rewrite behavior.
-    break
-  case "interface"
+    break;
+  case "interface":
    //TODO : Rewrite behavior.
-  break
+    break;
   default:
-
+    break;
 }
 
 
