@@ -1,96 +1,33 @@
-import fs from "fs";
+// TODO: Write Descriptions
 
-export {ToPascalCase, 
-        createFolderIfNotExists, 
-        printInfo, 
-        resolveParentPath, 
-        setFilePathExtensionAsCSharpFile, 
-        checkIfFileExist, 
-        readFile };
+export function ConvertToNamespaceSample(location){
+  let regx = /[a-zA-Z/]/;
+  if (location.split("").every(x => regx.test(x))){
+	  location = location.split("/")
+	  					 .filter(x => x != '')
+	  					 .map(y => ToPascalCase(y))
+	  					 .join(".");
+	  return location;
+  }
+  else
+  {
+  	return false;
+  }
+}
 
-/**
- * 
- * @param {string} value 
- * @return string
- */
-function ToPascalCase(value){
+export function ToPascalCase(value){
     return value[0].toUpperCase() + value.toLowerCase().slice(1, value.length);
 }
 
-/**
- * @return string
- */
-function resolveParentPath(){
-    return path.resolve(__dirname, "..");
+export function resolveParentPath(pathLib){
+    return pathLib.resolve(__dirname, "..");
 }
 
-/**
- * 
- * @param {string} output 
- * @param {string} clsName
- * @return string 
- */
-function setFilePathExtensionAsCSharpFile(output, clsName){
-    return path.resolve(output, clsName + ".cs");
+export function resolveWorkingPath(pathLib){
+    return pathLib.resolve("\.");
 }
 
-/**
- * 
- * @param {string} output 
- * @param {function} onSuccess 
- * @param {function} onError 
- */
-function checkIfFileExist(output, onSuccess, onError){
-    fs.access(output, (exists) => {
-        if(exists)
-            onSuccess();
-        else
-            onError();
-    });    
-};
-
-/**
- * 
- * @param {string} url 
- * @param {object} opts 
- * @param {function} onSuccess 
- * @param {function} onError 
- */
-function readFile(url, opts, onSuccess, onError) {
-    fs.readFile(url, opts, function(err, fileData){
-        if(err)
-            onError(err);
-        else    
-            onSuccess(fileData);
-    });
-}
-/**
- * 
- * @param {string} outputFolder 
- * @return Promise
- */
-function createFolderIfNotExists(outputFolder) {
-    return new Promise(function(resolve, reject){
-        fs.access(outputFolder, function(exists){
-            if(exists){                
-                fs.mkdir(outputFolder, function(err){
-                    resolve(false);
-                });
-            }
-            else{
-                resolve(true);
-            }
-        });  
-    }); 
-};
-
-/**
- * Print CLI call structure info.
- */
-function printInfo(){
+export function printUsage(){
     console.log("usage: core-generate [TEMPLATE TYPE] [--name | -n] [CLASSNAME]");
-    console.log("info: template type must be expecified as first parameter.");            
+    console.log("info: template type must be expecified as first parameter.");
 }
-
-
-
