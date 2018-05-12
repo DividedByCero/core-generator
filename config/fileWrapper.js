@@ -11,7 +11,7 @@ export class FileWrapper {
    * @param {function} onError
    * @return {Promise} result
    */
-  eadFile(onSuccess, onError) {
+  readFile(onSuccess, onError) {
       this.fsLib.readFile(this.filepath, this.encoding, (error, data) => {
           if(error)
               onError(error);
@@ -35,4 +35,17 @@ export class FileWrapper {
               onError(false);
       });
   };
+
+  writeFile(data, onSuccess, onError){
+      this.fsLib.writeFile(this.filepath, data, this.encoding, (err) => {
+         if(err){
+           onError(err);
+         }
+         else{
+           onSuccess(this.filepath);
+         }
+
+      });
+  }
+
 }

@@ -1,29 +1,38 @@
-import path from "path";
-import fs from "fs";
-import { ToPascalCase, resolveParentPath, setFilePathExtensionAsCSharpFile,
-         checkIfFileExist, readFile } from "../utils.js";
+const SUFFIX = 'Controller',
+      TYPE = 'class ',
+      INHERIDATE = 'Controller '
+      NAMESPACE = 'Namespace ',
+      ACCESS = 'public ',
+      CONTROLLER_ATTRIBUTE = '[Route("api/[controller]")]',
+      USING = "Using ",
+      SEMICOLON = ";",
+      NEWLINE = "\n",
+      TAB = "\t",
+      TABCODE = (code) => code.map(line => TAB + line);
 
-const CONTROLLERSUFFIX = "Controller";
+export default function webApiProvider(fileNamespace, className, fsLib, pathLib, FileWrapperClass, dependences){
+    let classDefinition = TAB + ACCESS + TYPE + className + SUFFIX + " : " + INHERIDATE;
+    let lines = [NEWLINE, "{", NEWLINE, NEWLINE, NEWLINE, "}", NEWLINE];
 
-export default function(namespace, className, opts, outputDir, actualPath){
-    let programLocation = resolveParentPath();
-    let templatefile = path.resolve(programLocation, "templates/web-api-controller.cs");
+    fileNamespace = NAMESPACE + fileNamespace + NEWLINE;
+    dependences = dependences.map(dep => USING + dep + SEMICOLON + NEWLINE).join("");
 
-    className = ToPascalCase(className) + CONTROLLERSUFFIX;
-    outputDir = setFilePathExtensionAsCSharpFile(outputDir, className);    
+    let result = dependences +
+    		         fileNamespace +
+    		         ("{" + NEWLINE) +
+    		         (TAB + CONTROLLER_ATTRIBUTE + NEWLINE) +
+    			       classDefinition +
+    			       TABCODE(lines).join("") +
+    			       ("}" + NEWLINE);
 
-    checkIfFileExist(outputDir, () => {
-        readFile(templatefile, opts, (fileData) => {
-            fileData = fileData.replace("[[CONTROLLER-NAME]]", className);    
-            fileData = fileData.replace("[[NAMESPACE]]", namespace);    
-
-            fs.writeFile(outputDir, fileData, function() {
-                console.log("File successfully scarffolded.");
-            });
-        }, (err) => {
-            console.log(err);
-        });
+    let writer = new FileWrapperClass(fileNamespace, fsLib);
+    writer.isAccesible(() => {
+      writer.writeFile(result, () => {
+        console.log("File Succesfully scarfolded");
+      }, (err) => {
+        console.log("Error : ", err.message);
+      });
     }, () => {
-        console.log("Invalid name, the Controller already exists...");
+        console.log("The File Already exists");
     });
 };
