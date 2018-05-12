@@ -1,7 +1,7 @@
 export class FileWrapper {
   constructor(filepath, fsLib){
     this.filepath = filepath;
-    this.encoding : "UTF8";
+    this.encoding = "UTF8";
     this.fsLib = fsLib;
   }
 
@@ -11,7 +11,7 @@ export class FileWrapper {
    * @param {function} onError
    * @return {Promise} result
    */
-  public readFile(onSuccess, onError) {
+  eadFile(onSuccess, onError) {
       this.fsLib.readFile(this.filepath, this.encoding, (error, data) => {
           if(error)
               onError(error);
@@ -27,7 +27,7 @@ export class FileWrapper {
    * @return {Promise} result
    */
 
-  public isAccesible(onSuccess, onError){
+  isAccesible(onSuccess, onError){
       this.fsLib.access(this.filepath, (exists) => {
           if(exists)
               onSuccess(true);

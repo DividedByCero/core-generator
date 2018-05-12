@@ -14,7 +14,7 @@ export class ProjectFileInfo {
       this.namespace = getNamespace(this.projectFileName);
     }
   }
-  private getNamespace(FileName){
+  getNamespace(FileName){
   	let assemblyTag = "<AssemblyName>";
   	let filepath = this.pathLib.resolve("./", FileName);
   	let result = this.fsLib.readFileSync(filepath, {encoding : "UTF-8"});
@@ -24,7 +24,7 @@ export class ProjectFileInfo {
   	return result.slice(startIndex, endIndex);
   }
 
-  private getProjectFile(dir) {
+  getProjectFile(dir) {
   	let rootFiles = [];
   	this.fsLib.readdirSync(testFolder).forEach(file => {
   		rootFiles.push(file);

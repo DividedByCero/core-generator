@@ -7,6 +7,6 @@ export const Commons = [
 
 export const WebAPI = Commons.concat([
   "System.Linq",
-  "System.Threading.Tasks"
+  "System.Threading.Tasks",
   "Microsoft.AspNetCore.Mv"
 ]);
