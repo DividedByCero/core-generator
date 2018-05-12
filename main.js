@@ -17,23 +17,24 @@ let options = {
 let ProjectFile = new projectFileInfo("./");
 if(projectFile.errorMessage) {
   console.log(projectFile.errorMessage);
-  return;
+}
+else{
+  //TODO: Test This.
+  let namespace = projectFile.namespace + "." + ConvertToNamespaceSample(options.outputPath);
+
+  switch (options.templateType) {
+    case "webapi/controller":
+      webApiProvider(namespace, ToPascalCase(options.Name), fs, path, fileWrapper, WebAPI);
+      break;
+    case "class":
+     //TODO : Rewrite behavior.
+      break;
+    case "interface":
+     //TODO : Rewrite behavior.
+      break;
+    default:
+      console.log("asdf");
+      break;
+  } 
 }
 
-//TODO: Test This.
-let namespace = projectFile.namespace + "." + ConvertToNamespaceSample(options.outputPath);
-
-switch (options.templateType) {
-  case "webapi/controller":
-    webApiProvider(namespace, ToPascalCase(options.Name), fs, path, fileWrapper, WebAPI);
-    break;
-  case "class":
-   //TODO : Rewrite behavior.
-    break;
-  case "interface":
-   //TODO : Rewrite behavior.
-    break;
-  default:
-    console.log("asdf");
-    break;
-}
