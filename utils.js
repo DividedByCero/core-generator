@@ -2,6 +2,7 @@
 
 export function ConvertToNamespaceSample(location){
   let regx = /[a-zA-Z/]/;
+  location = location.replace(".", "");
   if (location.split("").every(x => regx.test(x))){
 	  location = location.split("/")
 	  					 .filter(x => x != '')
@@ -13,6 +14,24 @@ export function ConvertToNamespaceSample(location){
   {
   	return false;
   }
+}
+
+export function RecursiveMkDir(path, arrayOfDirectories, fsLib, pathLib){
+	if((arrayOfDirectories || []).length == 0)
+		return null;
+
+	let dir = pathLib.resolve(path, arrayOfDirectories[0]);
+
+	fsLib.mkdir(dir, (err) => {
+    if(err)
+      console.log("folder " + arrayOfDirectories[0] + " exists");
+    else
+      console.log("folder " + arrayOfDirectories[0] + " created");
+
+		arrayOfDirectories.shift();
+		RecursiveMkDir(dir, arrayOfDirectories, fsLib, pathLib);
+	});
+
 }
 
 export function ToPascalCase(value){
