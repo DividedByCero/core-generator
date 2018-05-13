@@ -1,40 +1,56 @@
 import * as path from 'path';
 import * as fs from 'fs';
 
-import { resolveWorkingPath, ConvertToNamespaceSample } from './utils.js';
+import { resolveWorkingPath, ConvertToNamespaceSample, ToPascalCase, RecursiveMkDir } from './utils.js';
 import { ProjectFileInfo } from './config/projectFileInfo.js';
 import { FileWrapper } from './config/fileWrapper.js';
 import { webApiProvider } from './providers/webApiProvider.js';
 import { Commons, WebAPI } from "./config/classDependences.js";
 
 let options = {
-    targetTree : resolveWorkingPath(path),
+    rootPath : resolveWorkingPath(path),
     templateType : process.argv[2],
     Name : process.argv[3], // ClassName TODO: Rewrite ClassName Generator logic.
     outputPath : process.argv[4] // output File (Exclude in Webapi/Controller)
 };
 
-let ProjectFile = new projectFileInfo("./");
-if(projectFile.errorMessage) {
-  console.log(projectFile.errorMessage);
+let projectFileObject = new ProjectFileInfo(options.rootPath, fs, path);
+
+function init(projectFile) {
+  if(projectFile.errorMessage) {
+    console.log(projectFile.errorMessage);
+  }
+  else{
+    options.Name = ToPascalCase(options.Name);
+    //TODO: Test This.
+    let namespace = projectFile.namespace + "." + ConvertToNamespaceSample(options.outputPath);
+
+    let arrayOfDirectories = namespace.split(".");
+    arrayOfDirectories.shift();
+    RecursiveMkDir(options.rootPath, arrayOfDirectories, fs, path);
+
+    let outputFile = path.resolve(options.rootPath, options.outputPath);
+
+    switch (options.templateType) {
+      case "webapi/controller":
+        webApiProvider(outputFile, namespace, options.Name, fs, path, FileWrapper, WebAPI);
+        break;
+      case "class":
+       //TODO : Rewrite behavior.
+        break;
+      case "interface":
+       //TODO : Rewrite behavior.
+        break;
+      default:
+        console.log("asdf");
+        break;
+    }
+  }
+}
+
+if(options.templateType && options.Name){
+  init(projectFileObject);
 }
 else{
-  //TODO: Test This.
-  let namespace = projectFile.namespace + "." + ConvertToNamespaceSample(options.outputPath);
-
-  switch (options.templateType) {
-    case "webapi/controller":
-      webApiProvider(namespace, ToPascalCase(options.Name), fs, path, fileWrapper, WebAPI);
-      break;
-    case "class":
-     //TODO : Rewrite behavior.
-      break;
-    case "interface":
-     //TODO : Rewrite behavior.
-      break;
-    default:
-      console.log("asdf");
-      break;
-  } 
+  console.log("Need to expecified the template type and name");
 }
-

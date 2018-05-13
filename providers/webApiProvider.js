@@ -1,6 +1,6 @@
 const SUFFIX = 'Controller',
       TYPE = 'class ',
-      INHERIDATE = 'Controller '
+      INHERIDATE = 'Controller ',
       NAMESPACE = 'Namespace ',
       ACCESS = 'public ',
       CONTROLLER_ATTRIBUTE = '[Route("api/[controller]")]',
@@ -10,7 +10,7 @@ const SUFFIX = 'Controller',
       TAB = "\t",
       TABCODE = (code) => code.map(line => TAB + line);
 
-export default function webApiProvider(fileNamespace, className, fsLib, pathLib, FileWrapperClass, dependences){
+export function webApiProvider(output, fileNamespace, className, fsLib, pathLib, FileWrapperClass, dependences, ){
     let classDefinition = TAB + ACCESS + TYPE + className + SUFFIX + " : " + INHERIDATE;
     let lines = [NEWLINE, "{", NEWLINE, NEWLINE, NEWLINE, "}", NEWLINE];
 
@@ -25,8 +25,9 @@ export default function webApiProvider(fileNamespace, className, fsLib, pathLib,
     			       TABCODE(lines).join("") +
     			       ("}" + NEWLINE);
 
-    let writer = new FileWrapperClass(fileNamespace, fsLib);
-    writer.isAccesible(() => {
+    let writer = new FileWrapperClass(output + "/" + className + ".cs", fsLib);
+
+    writer.isAccesible((e) => {
       writer.writeFile(result, () => {
         console.log("File Succesfully scarfolded");
       }, (err) => {
