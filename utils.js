@@ -1,65 +1,64 @@
 // TODO: Write Descriptions
 
-export function clearClassName(name){
+export function clearClassName(name) {
   let regx = /[a-zA-Z/]/;
   return name.split("").filter(c => regx.test(c)).join("");
 }
 
-export function ConvertToNamespaceSample(location){
+export function ConvertToNamespaceSample(location) {
   let regx = /[a-zA-Z/]/;
   location = location.replace(/[.]/g, "");
 
-  if (location.split("").every(x => regx.test(x))){
-	  location = location.split("/").filter(x => x != '');
+  if (location.split("").every(x => regx.test(x))) {
+    location = location.split("/").filter(x => x != '');
 
-    if(location.length == 0){
+    if (location.length == 0) {
       return null;
     }
 
     location = location.map(y => ToPascalCase(y))
-	  					         .join(".");
-	  return location;
+      .join(".");
+    return location;
   }
-  else
-  {
-  	return false;
+  else {
+    return false;
   }
 }
 
-export function RecursiveMkDir(path, arrayOfDirectories, fsLib, pathLib, callback){
-	if((arrayOfDirectories || []).length == 0){
+export function RecursiveMkDir(path, arrayOfDirectories, fsLib, pathLib, callback) {
+  if ((arrayOfDirectories || []).length == 0) {
     callback();
     return null;
   }
 
-	let dir = pathLib.resolve(path, arrayOfDirectories[0]);
+  let dir = pathLib.resolve(path, arrayOfDirectories[0]);
 
-	fsLib.mkdir(dir, (err) => {
-    if(err)
+  fsLib.mkdir(dir, (err) => {
+    if (err)
       console.log("Notificacion :: Folder " + arrayOfDirectories[0] + " Already Exists");
     else
       console.log("Notificacion :: Folder " + arrayOfDirectories[0] + " Created");
 
-		arrayOfDirectories.shift();
-		RecursiveMkDir(dir, arrayOfDirectories, fsLib, pathLib, callback);
-	});
+    arrayOfDirectories.shift();
+    RecursiveMkDir(dir, arrayOfDirectories, fsLib, pathLib, callback);
+  });
 
 }
 
-export function ToPascalCase(value){
-    return value[0].toUpperCase() + value.toLowerCase().slice(1, value.length);
+export function ToPascalCase(value) {
+  return value[0].toUpperCase() + value.toLowerCase().slice(1, value.length);
 }
 
-export function resolveParentPath(pathLib){
-    return pathLib.resolve(__dirname, "..");
+export function resolveParentPath(pathLib) {
+  return pathLib.resolve(__dirname, "..");
 }
 
-export function resolveWorkingPath(pathLib){
-    return pathLib.resolve("\.");
+export function resolveWorkingPath(pathLib) {
+  return pathLib.resolve("\.");
 }
 
-export function PrintUsage(){
-let CLIlines = `
+export function PrintUsage() {
+  let CLIlines = `
 [usage]: ntcgen [TEMPLATE TYPE] [CLASSNAME] [OUTPUT_PATH]
 [info]:
 - Template type must be expecified as first parameter.
@@ -72,5 +71,5 @@ let CLIlines = `
 - cm:class        -> Class
 - cm:interface    -> Interface
 `;
-console.log(CLIlines);
+  console.log(CLIlines);
 }

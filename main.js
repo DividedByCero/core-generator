@@ -9,19 +9,19 @@ import { commonProvider } from './providers/commonProvider.js';
 import { Commons, WebAPI } from "./config/classDependences.js";
 
 let options = {
-    rootPath : resolveWorkingPath(path),
-    templateType : process.argv[2],
-    Name : process.argv[3],
-    outputPath : process.argv[4]
+  rootPath: resolveWorkingPath(path),
+  templateType: process.argv[2],
+  Name: process.argv[3],
+  outputPath: process.argv[4]
 };
 
 let projectFileObject = new ProjectFileInfo(options.rootPath, fs, path);
 
 function init(projectFile) {
-  if(projectFile.errorMessage) {
+  if (projectFile.errorMessage) {
     console.log(projectFile.errorMessage);
   }
-  else{
+  else {
     options.Name = ToPascalCase(clearClassName(options.Name));
     //TODO: Test This.
     let subnamespaces = ConvertToNamespaceSample(options.outputPath);
@@ -50,13 +50,12 @@ function init(projectFile) {
   }
 }
 
-if(options.templateType){
-  if(options.templateType == "--help")
-  {
+if (options.templateType) {
+  if (options.templateType == "--help") {
     PrintUsage();
   }
-  else{
-    if(options.Name)
+  else {
+    if (options.Name)
       init(projectFileObject);
   }
 }
