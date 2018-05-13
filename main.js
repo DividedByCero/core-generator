@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 
-import { resolveWorkingPath, ConvertToNamespaceSample, ToPascalCase, RecursiveMkDir } from './utils.js';
+import { resolveWorkingPath, ConvertToNamespaceSample, ToPascalCase, clearClassName, RecursiveMkDir } from './utils.js';
 import { ProjectFileInfo } from './config/projectFileInfo.js';
 import { FileWrapper } from './config/fileWrapper.js';
 import { webApiProvider } from './providers/webApiProvider.js';
@@ -22,23 +22,24 @@ function init(projectFile) {
     console.log(projectFile.errorMessage);
   }
   else{
-    options.Name = ToPascalCase(options.Name);
+    options.Name = ToPascalCase(clearClassName(options.Name));
     //TODO: Test This.
-    let namespace = projectFile.namespace + "." + ConvertToNamespaceSample(options.outputPath);
+    let subnamespaces = ConvertToNamespaceSample(options.outputPath);
+    let namespace = projectFile.namespace + (subnamespaces == null ? "" : "." + subnamespaces);
 
     let arrayOfDirectories = namespace.split(".");
     arrayOfDirectories.shift();
-    let outputFile = path.resolve(options.rootPath, options.outputPath);
+    let outputFile = path.resolve(options.rootPath, arrayOfDirectories.join("/"));
 
     RecursiveMkDir(options.rootPath, arrayOfDirectories, fs, path, () => {
       switch (options.templateType) {
-        case "webapi/controller":
+        case "wapi::controller":
           webApiProvider(outputFile, namespace, options.Name, fs, path, FileWrapper, WebAPI);
           break;
-        case "class":
+        case "cm::class":
           commonProvider(outputFile, namespace, options.Name, fs, path, FileWrapper, Commons, false);
           break;
-        case "interface":
+        case "cm::interface":
           commonProvider(outputFile, namespace, "I" + options.Name, fs, path, FileWrapper, Commons, true);
           break;
         default:

@@ -1,13 +1,23 @@
 // TODO: Write Descriptions
 
+export function clearClassName(name){
+  let regx = /[a-zA-Z/]/;
+  return name.split("").filter(c => regx.test(c)).join("");
+}
+
 export function ConvertToNamespaceSample(location){
   let regx = /[a-zA-Z/]/;
-  location = location.replace(".", "");
+  location = location.replace(/[.]/g, "");
+
   if (location.split("").every(x => regx.test(x))){
-	  location = location.split("/")
-	  					 .filter(x => x != '')
-	  					 .map(y => ToPascalCase(y))
-	  					 .join(".");
+	  location = location.split("/").filter(x => x != '');
+
+    if(location.length == 0){
+      return null;
+    }
+
+    location = location.map(y => ToPascalCase(y))
+	  					         .join(".");
 	  return location;
   }
   else
