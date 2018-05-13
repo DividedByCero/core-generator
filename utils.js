@@ -3,74 +3,73 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.readFile = exports.checkIfFileExist = exports.setFileExtensionAsCSharpFile = exports.resolveParentPath = exports.printInfo = exports.createFolderIfNotExists = exports.ToPascalCase = void 0;
-
-var _fs = _interopRequireDefault(require("fs"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/*
- * @param value {String}
- * @return {String}
-*/
-var ToPascalCase = function ToPascalCase(value) {
-  return value[0].toUpperCase() + value.toLowerCase().slice(1, value.length);
-};
-
+exports.clearClassName = clearClassName;
+exports.ConvertToNamespaceSample = ConvertToNamespaceSample;
+exports.RecursiveMkDir = RecursiveMkDir;
 exports.ToPascalCase = ToPascalCase;
-
-var resolveParentPath = function resolveParentPath() {
-  return path.resolve(__dirname, "..");
-};
-
 exports.resolveParentPath = resolveParentPath;
+exports.resolveWorkingPath = resolveWorkingPath;
+exports.PrintUsage = PrintUsage;
 
-var setFileExtensionAsCSharpFile = function setFileExtensionAsCSharpFile(output, clsName) {
-  return path.resolve(output, clsName + ".cs");
-};
+// TODO: Write Descriptions
+function clearClassName(name) {
+  var regx = /[a-zA-Z/]/;
+  return name.split("").filter(function (c) {
+    return regx.test(c);
+  }).join("");
+}
 
-exports.setFileExtensionAsCSharpFile = setFileExtensionAsCSharpFile;
+function ConvertToNamespaceSample(location) {
+  var regx = /[a-zA-Z/]/;
+  location = location.replace(/[.]/g, "");
 
-var checkIfFileExist = function checkIfFileExist(output, onSuccess, onError) {
-  _fs.default.access(output, function (exists) {
-    if (exists) onSuccess();else onError();
-  });
-};
-
-exports.checkIfFileExist = checkIfFileExist;
-
-var readFile = function readFile(url, opts, onSuccess, onError) {
-  _fs.default.readFile(url, opts, function (err, fileData) {
-    if (err) onError(err);else onSuccess(fileData);
-  });
-};
-/*
- * @param outputFolder {String}
- * @return {Promise}
-*/
-
-
-exports.readFile = readFile;
-
-var createFolderIfNotExists = function createFolderIfNotExists(outputFolder) {
-  return new Promise(function (resolve, reject) {
-    _fs.default.access(outputFolder, function (exists) {
-      if (exists) {
-        _fs.default.mkdir(outputFolder, function (err) {
-          resolve(false);
-        });
-      } else {
-        resolve(true);
-      }
+  if (location.split("").every(function (x) {
+    return regx.test(x);
+  })) {
+    location = location.split("/").filter(function (x) {
+      return x != '';
     });
+
+    if (location.length == 0) {
+      return null;
+    }
+
+    location = location.map(function (y) {
+      return ToPascalCase(y);
+    }).join(".");
+    return location;
+  } else {
+    return false;
+  }
+}
+
+function RecursiveMkDir(path, arrayOfDirectories, fsLib, pathLib, callback) {
+  if ((arrayOfDirectories || []).length == 0) {
+    callback();
+    return null;
+  }
+
+  var dir = pathLib.resolve(path, arrayOfDirectories[0]);
+  fsLib.mkdir(dir, function (err) {
+    if (err) console.log("Notificacion :: Folder " + arrayOfDirectories[0] + " Already Exists");else console.log("Notificacion :: Folder " + arrayOfDirectories[0] + " Created");
+    arrayOfDirectories.shift();
+    RecursiveMkDir(dir, arrayOfDirectories, fsLib, pathLib, callback);
   });
-};
+}
 
-exports.createFolderIfNotExists = createFolderIfNotExists;
+function ToPascalCase(value) {
+  return value[0].toUpperCase() + value.toLowerCase().slice(1, value.length);
+}
 
-var printInfo = function printInfo() {
-  console.log("usage: core-generate [TEMPLATE TYPE] [--name | -n] [CLASSNAME]");
-  console.log("info: template type must be expecified as first parameter.");
-};
+function resolveParentPath(pathLib) {
+  return pathLib.resolve(__dirname, "..");
+}
 
-exports.printInfo = printInfo;
+function resolveWorkingPath(pathLib) {
+  return pathLib.resolve("\.");
+}
+
+function PrintUsage() {
+  var CLIlines = "\n[usage]: ntcgen [TEMPLATE TYPE] [CLASSNAME] [OUTPUT_PATH]\n[info]:\n- Template type must be expecified as first parameter.\n- Avoid any non-letter character inside the [CLASSNAME] (All will be ignore).\n- Any non-letter character into [OUTPUT_PATH] would cause \"Invalid output\" notificacion.\n- subDirectories expecified in the [OUTPUT_PATH] would been created.\n\n[Templates Types]\n- wapi:controller -> WebAPI controller\n- cm:class        -> Class\n- cm:interface    -> Interface\n";
+  console.log(CLIlines);
+}

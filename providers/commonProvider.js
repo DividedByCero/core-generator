@@ -3,14 +3,12 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.webApiProvider = webApiProvider;
+exports.commonProvider = commonProvider;
 
-var SUFFIX = 'Controller',
-    TYPE = 'class ',
-    INHERIDATE = 'Controller ',
+var CLASS = 'class ',
+    INTERFACE = "interface ",
     NAMESPACE = 'namespace ',
     ACCESS = 'public ',
-    CONTROLLER_ATTRIBUTE = '[Route("api/[controller]")]',
     USING = "using ",
     SEMICOLON = ";",
     NEWLINE = "\n",
@@ -21,15 +19,15 @@ var SUFFIX = 'Controller',
   });
 };
 
-function webApiProvider(output, fileNamespace, className, fsLib, pathLib, FileWrapperClass, dependences) {
-  var classDefinition = TAB + ACCESS + TYPE + className + SUFFIX + " : " + INHERIDATE;
+function commonProvider(output, fileNamespace, className, fsLib, pathLib, FileWrapperClass, dependences, isInterface) {
+  var classDefinition = TAB + ACCESS + (isInterface ? INTERFACE : CLASS) + className;
   var lines = [NEWLINE, "{", NEWLINE, NEWLINE, NEWLINE, "}", NEWLINE];
   fileNamespace = NAMESPACE + fileNamespace + NEWLINE;
   dependences = dependences.map(function (dep) {
     return USING + dep + SEMICOLON + NEWLINE;
   }).join("");
-  var result = dependences + fileNamespace + ("{" + NEWLINE) + (TAB + CONTROLLER_ATTRIBUTE + NEWLINE) + classDefinition + TABCODE(lines).join("") + ("}" + NEWLINE);
-  var writer = new FileWrapperClass(output + "/" + className + SUFFIX + ".cs", fsLib);
+  var result = dependences + fileNamespace + ("{" + NEWLINE) + classDefinition + TABCODE(lines).join("") + ("}" + NEWLINE);
+  var writer = new FileWrapperClass(output + "/" + className + ".cs", fsLib);
   writer.isAccesible(function (e) {
     writer.writeFile(result, function () {
       console.log("Success :: File Succesfully Scarfolded");
@@ -37,7 +35,7 @@ function webApiProvider(output, fileNamespace, className, fsLib, pathLib, FileWr
       console.log("Error :: ", err.message);
     });
   }, function () {
-    console.log("Notificacion :: The File Already exists");
+    console.log("Notification :: The File Already exists");
   });
 }
 
