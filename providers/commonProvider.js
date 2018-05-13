@@ -1,17 +1,15 @@
-const SUFFIX = 'Controller',
-      TYPE = 'class ',
-      INHERIDATE = 'Controller ',
+const CLASS = 'class ',
+      INTERFACE = "interface ",
       NAMESPACE = 'namespace ',
       ACCESS = 'public ',
-      CONTROLLER_ATTRIBUTE = '[Route("api/[controller]")]',
       USING = "using ",
       SEMICOLON = ";",
       NEWLINE = "\n",
       TAB = "\t",
       TABCODE = (code) => code.map(line => TAB + line);
 
-export function webApiProvider(output, fileNamespace, className, fsLib, pathLib, FileWrapperClass, dependences){
-    let classDefinition = TAB + ACCESS + TYPE + className + SUFFIX + " : " + INHERIDATE;
+export function commonProvider(output, fileNamespace, className, fsLib, pathLib, FileWrapperClass, dependences, isInterface){
+    let classDefinition = TAB + ACCESS + (isInterface ? INTERFACE : CLASS) + className;
     let lines = [NEWLINE, "{", NEWLINE, NEWLINE, NEWLINE, "}", NEWLINE];
 
     fileNamespace = NAMESPACE + fileNamespace + NEWLINE;
@@ -20,7 +18,6 @@ export function webApiProvider(output, fileNamespace, className, fsLib, pathLib,
     let result = dependences +
     		         fileNamespace +
     		         ("{" + NEWLINE) +
-    		         (TAB + CONTROLLER_ATTRIBUTE + NEWLINE) +
     			       classDefinition +
     			       TABCODE(lines).join("") +
     			       ("}" + NEWLINE);

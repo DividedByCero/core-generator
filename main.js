@@ -5,6 +5,7 @@ import { resolveWorkingPath, ConvertToNamespaceSample, ToPascalCase, RecursiveMk
 import { ProjectFileInfo } from './config/projectFileInfo.js';
 import { FileWrapper } from './config/fileWrapper.js';
 import { webApiProvider } from './providers/webApiProvider.js';
+import { commonProvider } from './providers/commonProvider.js';
 import { Commons, WebAPI } from "./config/classDependences.js";
 
 let options = {
@@ -35,10 +36,10 @@ function init(projectFile) {
           webApiProvider(outputFile, namespace, options.Name, fs, path, FileWrapper, WebAPI);
           break;
         case "class":
-         //TODO : Rewrite behavior.
+          commonProvider(outputFile, namespace, options.Name, fs, path, FileWrapper, Commons, false);
           break;
         case "interface":
-         //TODO : Rewrite behavior.
+          commonProvider(outputFile, namespace, "I" + options.Name, fs, path, FileWrapper, Commons, true);
           break;
         default:
           console.log("asdf");
