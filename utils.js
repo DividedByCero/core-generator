@@ -31,7 +31,7 @@ export function RecursiveMkDir(path, arrayOfDirectories, fsLib, pathLib, callbac
       console.log("folder " + arrayOfDirectories[0] + " created");
 
 		arrayOfDirectories.shift();
-		RecursiveMkDir(dir, arrayOfDirectories, fsLib, pathLib);
+		RecursiveMkDir(dir, arrayOfDirectories, fsLib, pathLib, callback);
 	});
 
 }
