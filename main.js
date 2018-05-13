@@ -27,24 +27,24 @@ function init(projectFile) {
 
     let arrayOfDirectories = namespace.split(".");
     arrayOfDirectories.shift();
-    RecursiveMkDir(options.rootPath, arrayOfDirectories, fs, path);
-
     let outputFile = path.resolve(options.rootPath, options.outputPath);
 
-    switch (options.templateType) {
-      case "webapi/controller":
-        webApiProvider(outputFile, namespace, options.Name, fs, path, FileWrapper, WebAPI);
-        break;
-      case "class":
-       //TODO : Rewrite behavior.
-        break;
-      case "interface":
-       //TODO : Rewrite behavior.
-        break;
-      default:
-        console.log("asdf");
-        break;
-    }
+    RecursiveMkDir(options.rootPath, arrayOfDirectories, fs, path, () => {
+      switch (options.templateType) {
+        case "webapi/controller":
+          webApiProvider(outputFile, namespace, options.Name, fs, path, FileWrapper, WebAPI);
+          break;
+        case "class":
+         //TODO : Rewrite behavior.
+          break;
+        case "interface":
+         //TODO : Rewrite behavior.
+          break;
+        default:
+          console.log("asdf");
+          break;
+      }
+    });
   }
 }
 

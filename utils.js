@@ -16,9 +16,11 @@ export function ConvertToNamespaceSample(location){
   }
 }
 
-export function RecursiveMkDir(path, arrayOfDirectories, fsLib, pathLib){
-	if((arrayOfDirectories || []).length == 0)
-		return null;
+export function RecursiveMkDir(path, arrayOfDirectories, fsLib, pathLib, callback){
+	if((arrayOfDirectories || []).length == 0){
+    callback();
+    return null;
+  }
 
 	let dir = pathLib.resolve(path, arrayOfDirectories[0]);
 
