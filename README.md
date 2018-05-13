@@ -1,17 +1,25 @@
-# core-generator
-CLI Tool to generate basic templates files in a .NETCore Project
+## NetCore Template File Generator
+CLI Tool to generate basic files for any NETCore Project outside of a VStudio Enviroment.
 
-## Installation
-it's still needs to be put in the PATH env. (node required)
-TODO : add details
+### Installation
+[Still working on it, soon it will be installable via NPM]
 
-## Usage :
+### Usage
 ```
-core-generate [TEMPLATE TYPE] [--name | -n] [CLASSNAME]
+ntcgen [TEMPLATE TYPE] [CLASSNAME] [OUTPUT_PATH]
+```
+### info
+```
+- Template type must be expecified as first parameter.
+- Avoid any non-letter character inside the [CLASSNAME] (All will be ignore).
+- Any non-letter character into [OUTPUT_PATH] would cause "Invalid output" notificacion (Still Untested).
+- subdirectories expecified in the [OUTPUT_PATH] would been created.
+-- interfaces files will be created with a "I" Preffix.
 ```
 
-## Available Templates :
+### Available Templates :
 ```
-- webapi/controller
-- ...
+- wapi:controller -> WebAPI controller
+- cm:class        -> Class
+- cm:interface    -> Interface
 ```
