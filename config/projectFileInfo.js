@@ -7,9 +7,9 @@ export class ProjectFileInfo {
     let projectFile = this.getProjectFile(dir);
 
     if(projectFile == null)
-      this.errorMessage = "Not project Found";
+      this.errorMessage = "Error :: Not project Found";
     else if(projectFile == false)
-      this.errorMessage = "There are more than two project files";
+      this.errorMessage = "Error :: There are more than two project files";
     else {
       this.projectFileName = projectFile;
       this.namespace = this.getNamespace(this.projectFileName);

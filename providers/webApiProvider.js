@@ -25,15 +25,15 @@ export function webApiProvider(output, fileNamespace, className, fsLib, pathLib,
     			       TABCODE(lines).join("") +
     			       ("}" + NEWLINE);
 
-    let writer = new FileWrapperClass(output + "/" + className + ".cs", fsLib);
+    let writer = new FileWrapperClass(output + "/" + className + SUFFIX + ".cs", fsLib);
 
     writer.isAccesible((e) => {
       writer.writeFile(result, () => {
-        console.log("File Succesfully Scarfolded");
+        console.log("Success :: File Succesfully Scarfolded");
       }, (err) => {
-        console.log("Error : ", err.message);
+        console.log("Error :: ", err.message);
       });
     }, () => {
-        console.log("The File Already exists");
+        console.log("Notificacion :: The File Already exists");
     });
 };

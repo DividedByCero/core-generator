@@ -36,9 +36,9 @@ export function RecursiveMkDir(path, arrayOfDirectories, fsLib, pathLib, callbac
 
 	fsLib.mkdir(dir, (err) => {
     if(err)
-      console.log("folder " + arrayOfDirectories[0] + " exists");
+      console.log("Notificacion :: Folder " + arrayOfDirectories[0] + " Already Exists");
     else
-      console.log("folder " + arrayOfDirectories[0] + " created");
+      console.log("Notificacion :: Folder " + arrayOfDirectories[0] + " Created");
 
 		arrayOfDirectories.shift();
 		RecursiveMkDir(dir, arrayOfDirectories, fsLib, pathLib, callback);
@@ -58,7 +58,19 @@ export function resolveWorkingPath(pathLib){
     return pathLib.resolve("\.");
 }
 
-export function printUsage(){
-    console.log("usage: core-generate [TEMPLATE TYPE] [--name | -n] [CLASSNAME]");
-    console.log("info: template type must be expecified as first parameter.");
+export function PrintUsage(){
+let CLIlines = `
+[usage]: ntcgen [TEMPLATE TYPE] [CLASSNAME] [OUTPUT_PATH]
+[info]:
+- Template type must be expecified as first parameter.
+- Avoid any non-letter character inside the [CLASSNAME] (All will be ignore).
+- Any non-letter character into [OUTPUT_PATH] would cause "Invalid output" notificacion.
+- subDirectories expecified in the [OUTPUT_PATH] would been created.
+
+[Templates Types]
+- wapi:controller -> WebAPI controller
+- cm:class        -> Class
+- cm:interface    -> Interface
+`;
+console.log(CLIlines);
 }

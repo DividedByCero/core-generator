@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 
-import { resolveWorkingPath, ConvertToNamespaceSample, ToPascalCase, clearClassName, RecursiveMkDir } from './utils.js';
+import { resolveWorkingPath, ConvertToNamespaceSample, ToPascalCase, clearClassName, RecursiveMkDir, PrintUsage } from './utils.js';
 import { ProjectFileInfo } from './config/projectFileInfo.js';
 import { FileWrapper } from './config/fileWrapper.js';
 import { webApiProvider } from './providers/webApiProvider.js';
@@ -11,8 +11,8 @@ import { Commons, WebAPI } from "./config/classDependences.js";
 let options = {
     rootPath : resolveWorkingPath(path),
     templateType : process.argv[2],
-    Name : process.argv[3], // ClassName TODO: Rewrite ClassName Generator logic.
-    outputPath : process.argv[4] // output File (Exclude in Webapi/Controller)
+    Name : process.argv[3],
+    outputPath : process.argv[4]
 };
 
 let projectFileObject = new ProjectFileInfo(options.rootPath, fs, path);
@@ -33,26 +33,33 @@ function init(projectFile) {
 
     RecursiveMkDir(options.rootPath, arrayOfDirectories, fs, path, () => {
       switch (options.templateType) {
-        case "wapi::controller":
+        case "wapi:controller":
           webApiProvider(outputFile, namespace, options.Name, fs, path, FileWrapper, WebAPI);
           break;
-        case "cm::class":
+        case "cm:class":
           commonProvider(outputFile, namespace, options.Name, fs, path, FileWrapper, Commons, false);
           break;
-        case "cm::interface":
+        case "cm:interface":
           commonProvider(outputFile, namespace, "I" + options.Name, fs, path, FileWrapper, Commons, true);
           break;
         default:
-          console.log("asdf");
+          console.log("Notificacion :: Please type a valid TemplateType, type --help for more information.");
           break;
       }
     });
   }
 }
 
-if(options.templateType && options.Name){
-  init(projectFileObject);
+if(options.templateType){
+  if(options.templateType == "--help")
+  {
+    PrintUsage();
+  }
+  else{
+    if(options.Name)
+      init(projectFileObject);
+  }
 }
-else{
-  console.log("Need to expecified the template type and name");
+else {
+  console.log("Notification :: templateType and Name should be expecified, type --help for more information");
 }
