@@ -1,3 +1,0 @@
-called_path=${0%/*}
-
-node $called_path $1 $2 $3 $4
