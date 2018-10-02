@@ -11,4 +11,6 @@ export default function BaseGeneratorFactory(args : Array<String>) {
 
     if(obj.objectType == null) obj.isHelp = true; 
 
+    return obj;
+
 }
