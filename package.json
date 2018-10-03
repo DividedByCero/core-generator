@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --require ts-node/register ./unit.ts",
-    "start": "tsc && node ./dist/entry.js",
     "ts": "ts-node",
-    "mocha": "mocha"    
+    "build" : "tsc",
+    "start" : "node dist/entry.js",
+    "prestart" : "npm run build"    
   },
   "repository": {
     "type": "git",
